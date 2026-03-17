@@ -48,37 +48,36 @@
   <div id="output"></div>
 
   <script>
-    let count = 0;
+  let count = 0;
 
-    function addNumber() {
-      count++;
-      const output = document.getElementById("output");
-      const span = document.createElement("span");
-      span.className = "number";
-      span.textContent = "67";
-      output.appendChild(span);
+  function addNumber() {
+    count++;
+    const output = document.getElementById("output");
+    const span = document.createElement("span");
+    span.className = "number";
+    span.textContent = "67";
+    output.appendChild(span);
 
-      document.getElementById("counter").textContent = "目前總數：" + count;
+    document.getElementById("counter").textContent = "目前總數：" + count;
 
-      const celebration = document.getElementById("celebration");
-      if (count % 100 === 0) {
-        celebration.style.display = "block";
-      } else {
-        celebration.style.display = "none";
-      }
-
-      if (count  150 === 0) {
-        // ✅ 在這裡填入你要跳轉的網址
-        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-        
-      } else if (count 67 === 0) {
-        // ✅ 在這裡填入你要跳轉的網址
-        window.open("https://www.google.com/search?q=67&oq=67&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBBzY1NmowajGoAgCwAgA&sourceid=chrome&ie=UTF-8", "_blank");
-         }else if (count 66 === 0) {
-        // ✅ 在這裡填入你要跳轉的網址
-        window.open("https://www.google.com/search?q=67&oq=67&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBBzY1NmowajGoAgCwAgA&sourceid=chrome&ie=UTF-8", "_blank");
+    const celebration = document.getElementById("celebration");
+    if (count === 100) {
+      celebration.style.display = "block";
+    } else {
+      celebration.style.display = "none";
     }
+
+    if (count === 150) {
+      // ✅ 在這裡填入你要跳轉的網址
+      window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+    } else if (count === 67) {
+      // ✅ 在這裡填入你要跳轉的網址
+      window.open("https://www.google.com/search?q=67", "_blank");
+    } else if (count === 66) {
+      // ✅ 在這裡填入你要跳轉的網址
+      window.open("https://www.google.com/search?q=66", "_blank");
     }
-  </script>
+  }
+</script>
 </body>
 </html>
