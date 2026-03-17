@@ -50,6 +50,14 @@
   <script>
   let count = 0;
 
+  // 事件清單：key 是數字，value 是要跳轉的網址
+  const events = {
+    66: "https://www.youtube.com/watch?v=YDLafQ-Rg-k",
+    67: "https://www.google.com/search?q=67",
+    100: "celebration", // 特殊事件：顯示慶祝文字
+    150: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  };
+
   function addNumber() {
     count++;
     const output = document.getElementById("output");
@@ -60,22 +68,18 @@
 
     document.getElementById("counter").textContent = "目前總數：" + count;
 
-    const celebration = document.getElementById("celebration");
-    if (count === 100) {
-      celebration.style.display = "block";
+    // 檢查事件清單
+    if (events[count]) {
+      if (events[count] === "celebration") {
+        // 顯示慶祝文字
+        document.getElementById("celebration").style.display = "block";
+      } else {
+        // 開新分頁
+        window.open(events[count], "_blank");
+      }
     } else {
-      celebration.style.display = "none";
-    }
-
-    if (count === 150) {
-      // ✅ 在這裡填入你要跳轉的網址
-      window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-    } else if (count === 67) {
-      // ✅ 在這裡填入你要跳轉的網址
-      window.open("https://www.google.com/search?q=67", "_blank");
-    } else if (count === 66) {
-      // ✅ 在這裡填入你要跳轉的網址
-      window.open("https://www.youtube.com/watch?v=YDLafQ-Rg-k"_blank");
+      // 沒有事件就隱藏慶祝文字
+      document.getElementById("celebration").style.display = "none";
     }
   }
 </script>
