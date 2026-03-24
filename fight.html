@@ -22,17 +22,18 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
   <script>
-    // 🔑 Firebase 設定（換成你自己的專案設定）
+    // 🔑 Firebase 設定（請換成你自己的專案設定）
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
       projectId: "YOUR_PROJECT_ID"
     };
     firebase.initializeApp(firebaseConfig);
+
     const auth = firebase.auth();
     const db = firebase.firestore();
-
     const provider = new firebase.auth.GoogleAuthProvider();
+
     const loginBtn = document.getElementById("loginBtn");
     const status = document.getElementById("status");
     const gameDiv = document.getElementById("game");
@@ -46,6 +47,8 @@
         currentUser = result.user;
         status.textContent = "登入成功：" + currentUser.displayName;
         loadProgress();
+      }).catch(err => {
+        status.textContent = "登入失敗：" + err.message;
       });
     };
 
@@ -56,7 +59,6 @@
           progress = doc.data();
           showGame("歡迎回來，" + progress.name + "（" + progress.sect + "）！");
         } else {
-          // 沒有進度 → 建立角色
           createCharacter();
         }
       });
