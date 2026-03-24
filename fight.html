@@ -2,125 +2,35 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>文字武俠遊戲</title>
-  <style>
-    body { font-family: sans-serif; margin: 20px; }
-    #game { border: 1px solid #ccc; padding: 10px; margin-top: 20px; }
-    .choice { margin: 5px 0; }
-    button { margin: 5px; }
-  </style>
+  <title>Google 登入測試</title>
 </head>
 <body>
-  <h2>文字武俠遊戲</h2>
+  <h2>文字武俠遊戲登入</h2>
   <button id="loginBtn">Google 登入</button>
   <div id="status"></div>
-  <div id="game" style="display:none;"></div>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
   <script>
-    // 🔑 Firebase 設定（請換成你自己的專案設定）
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID"
+      apiKey: "你的API_KEY",
+      authDomain: "你的專案.firebaseapp.com",
+      projectId: "你的專案ID"
     };
     firebase.initializeApp(firebaseConfig);
 
     const auth = firebase.auth();
-    const db = firebase.firestore();
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    const loginBtn = document.getElementById("loginBtn");
-    const status = document.getElementById("status");
-    const gameDiv = document.getElementById("game");
-
-    let currentUser = null;
-    let progress = null;
-
-    // 登入
-    loginBtn.onclick = () => {
+    document.getElementById("loginBtn").onclick = () => {
       auth.signInWithPopup(provider).then(result => {
-        currentUser = result.user;
-        status.textContent = "登入成功：" + currentUser.displayName;
-        loadProgress();
+        const user = result.user;
+        document.getElementById("status").textContent = "登入成功：" + user.displayName;
       }).catch(err => {
-        status.textContent = "登入失敗：" + err.message;
+        document.getElementById("status").textContent = "登入失敗：" + err.message;
       });
     };
-
-    // 讀取進度
-    function loadProgress() {
-      db.collection("players").doc(currentUser.uid).get().then(doc => {
-        if (doc.exists) {
-          progress = doc.data();
-          showGame("歡迎回來，" + progress.name + "（" + progress.sect + "）！");
-        } else {
-          createCharacter();
-        }
-      });
-    }
-
-    // 建立角色
-    function createCharacter() {
-      gameDiv.style.display = "block";
-      gameDiv.innerHTML = `
-        <p>你本是市井小民，卻因緣際會踏入江湖。選擇你的門派：</p>
-        <button class="choice" onclick="chooseSect('少林')">少林</button>
-        <button class="choice" onclick="chooseSect('武當')">武當</button>
-        <button class="choice" onclick="chooseSect('丐幫')">丐幫</button>
-      `;
-    }
-
-    window.chooseSect = function(sect) {
-      progress = {
-        name: currentUser.displayName,
-        sect: sect,
-        level: 1,
-        hp: 100,
-        atk: 10,
-        inventory: []
-      };
-      saveProgress();
-      showGame("你選擇了 " + sect + "，江湖之路正式開始！");
-    };
-
-    // 顯示遊戲畫面
-    function showGame(text) {
-      gameDiv.style.display = "block";
-      gameDiv.innerHTML = `
-        <p>${text}</p>
-        <p>目前等級：${progress.level} 血量：${progress.hp}</p>
-        <button onclick="doAction('修練')">修練</button>
-        <button onclick="doAction('戰鬥')">戰鬥</button>
-      `;
-    }
-
-    // 行動
-    window.doAction = function(action) {
-      if (action === "修練") {
-        progress.level++;
-        progress.hp += 10;
-        showGame("你勤加修練，等級提升！");
-      } else if (action === "戰鬥") {
-        progress.hp -= 20;
-        if (progress.hp <= 0) {
-          progress.hp = 50;
-          showGame("你在戰鬥中敗北，被送回安全地點。");
-        } else {
-          showGame("你經歷一場激戰，血量減少。");
-        }
-      }
-      saveProgress();
-    };
-
-    // 存檔
-    function saveProgress() {
-      db.collection("players").doc(currentUser.uid).set(progress);
-    }
   </script>
 </body>
 </html>
