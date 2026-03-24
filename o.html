@@ -8,6 +8,8 @@
     #chat { border: 1px solid #ccc; padding: 10px; max-height: 300px; overflow-y: auto; }
     .user { color: blue; margin: 5px 0; }
     .bot { color: red; margin: 5px 0; }
+    #level { margin-top: 10px; }
+    #custom { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -16,19 +18,48 @@
   <input type="text" id="input" placeholder="輸入一句話..." />
   <button id="sendBtn">送出</button>
 
+  <div id="level">
+    <label for="ganhuaLevel">選擇幹話等級：</label>
+    <select id="ganhuaLevel">
+      <option value="light">輕度幹話</option>
+      <option value="medium">中度幹話</option>
+      <option value="heavy">重度幹話</option>
+      <option value="custom">自訂幹話</option>
+    </select>
+  </div>
+
+  <div id="custom">
+    <input type="text" id="customInput" placeholder="輸入自訂幹話..." />
+    <button id="addCustomBtn">加入幹話庫</button>
+  </div>
+
   <script>
     const chat = document.getElementById("chat");
     const input = document.getElementById("input");
     const sendBtn = document.getElementById("sendBtn");
+    const ganhuaLevel = document.getElementById("ganhuaLevel");
+    const customInput = document.getElementById("customInput");
+    const addCustomBtn = document.getElementById("addCustomBtn");
 
-    // 幹話庫
-    const ganhuaList = [
-      "你這問題比我早餐還冷。",
-      "聽君一席話，如聽一席話。",
-      "這答案我連狗都不想給。",
-      "你說的很有道理，但完全沒用。",
-      "這問題我建議你去問隔壁老王。"
-    ];
+    // 幹話庫分等級
+    const ganhuaList = {
+      light: [
+        "聽君一席話，如聽一席話。",
+        "這問題比我早餐還冷。",
+        "你說的很有道理，但完全沒用。"
+      ],
+      medium: [
+        "這答案我連狗都不想給。",
+        "你這問題我建議去問隔壁老王。",
+        "說得好像你很懂，但我更懶得懂。"
+      ],
+      heavy: [
+        "這問題爛到我想直接關機。",
+        "你講這句話浪費了我三秒人生。",
+        "我建議你去原地爆炸，謝謝。"
+      ],
+      custom: [] // 使用者自訂幹話
+    };
 
     function addMessage(text, type) {
       const div = document.createElement("div");
@@ -44,15 +75,30 @@
       addMessage("你：" + userText, "user");
       input.value = "";
 
-      // 隨機挑一句幹話
-      const reply = ganhuaList[Math.floor(Math.random() * ganhuaList.length)];
+      // 根據選擇的等級挑一句幹話
+      const level = ganhuaLevel.value;
+      const list = ganhuaList[level];
+      if (list.length === 0) {
+        addMessage("幹話機器人：目前沒有自訂幹話，快加一個吧！", "bot");
+        return;
+      }
+      const reply = list[Math.floor(Math.random() * list.length)];
       addMessage("幹話機器人：" + reply, "bot");
+    }
+
+    function addCustomGanhua() {
+      const customText = customInput.value.trim();
+      if (!customText) return;
+      ganhuaList.custom.push(customText);
+      addMessage("系統：已加入自訂幹話 → " + customText, "bot");
+      customInput.value = "";
     }
 
     sendBtn.addEventListener("click", replyGanhua);
     input.addEventListener("keypress", function(e) {
       if (e.key === "Enter") replyGanhua();
     });
+    addCustomBtn.addEventListener("click", addCustomGanhua);
   </script>
 </body>
 </html>
