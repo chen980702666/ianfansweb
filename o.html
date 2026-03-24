@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>幹話互動網頁</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; max-height: 300px; overflow-y: auto; }
+    .user { color: blue; margin: 5px 0; }
+    .bot { color: red; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h2>幹話聊天室</h2>
+  <div id="chat"></div>
+  <input type="text" id="input" placeholder="輸入一句話..." />
+  <button id="sendBtn">送出</button>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // 幹話庫
+    const ganhuaList = [
+      "你這問題比我早餐還冷。",
+      "聽君一席話，如聽一席話。",
+      "這答案我連狗都不想給。",
+      "你說的很有道理，但完全沒用。",
+      "這問題我建議你去問隔壁老王。"
+    ];
+
+    function addMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = type;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function replyGanhua() {
+      const userText = input.value.trim();
+      if (!userText) return;
+      addMessage("你：" + userText, "user");
+      input.value = "";
+
+      // 隨機挑一句幹話
+      const reply = ganhuaList[Math.floor(Math.random() * ganhuaList.length)];
+      addMessage("幹話機器人：" + reply, "bot");
+    }
+
+    sendBtn.addEventListener("click", replyGanhua);
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") replyGanhua();
+    });
+  </script>
+</body>
+</html>
