@@ -1,28 +1,41 @@
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Google 登入測試</title>
+</head>
+<body>
+  <h2>Google 登入測試</h2>
+  <button id="loginBtn">Google 登入</button>
+  <div id="status"></div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "你的真實API_KEY",
-    authDomain: "你的專案ID.firebaseapp.com",
-    projectId: "你的專案ID",
-    storageBucket: "你的專案ID.appspot.com",
-    messagingSenderId: "你的SenderID",
-    appId: "你的AppID"
-  };
-  firebase.initializeApp(firebaseConfig);
+  <!-- Firebase v8 SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-  const auth = firebase.auth();
-  const provider = new firebase.auth.GoogleAuthProvider();
+  <script>
+    const firebaseConfig = {
+      apiKey: "你的API_KEY",
+      authDomain: "你的專案ID.firebaseapp.com",
+      projectId: "你的專案ID"
+    };
+    firebase.initializeApp(firebaseConfig);
 
-  document.getElementById("loginBtn").onclick = () => {
-    auth.signInWithPopup(provider).then(result => {
-      const user = result.user;
-      document.getElementById("status").textContent = "登入成功：" + user.displayName;
-    }).catch(err => {
-      document.getElementById("status").textContent = "登入失敗：" + err.message;
-      console.error(err);
-    });
-  };
-</script>
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    // 確保按鈕已經存在再綁定
+    window.onload = function() {
+      document.getElementById("loginBtn").onclick = () => {
+        auth.signInWithPopup(provider).then(result => {
+          const user = result.user;
+          document.getElementById("status").textContent = "登入成功：" + user.displayName;
+        }).catch(err => {
+          document.getElementById("status").textContent = "登入失敗：" + err.message;
+          console.error(err);
+        });
+      };
+    };
+  </script>
+</body>
+</html>
