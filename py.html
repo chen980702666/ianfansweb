@@ -4,85 +4,54 @@
   <meta charset="UTF-8">
   <title>ian粉絲網超級無敵總部</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-    }
-    #output {
-      font-size: 20px;
-      margin-top: 10px;
-      color: #333;
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .number {
-      margin: 4px;
-      display: inline-block;
-    }
-    #counter {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    #celebration {
-      position: sticky;
-      top: 0;
-      background: yellow;
-      font-size: 32px;
-      color: red;
-      padding: 10px;
-      display: none;
-      z-index: 10;
-    }
+    body { font-family: sans-serif; margin: 20px; }
+    #output { font-size: 20px; margin-top: 10px; color: #333; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; display: flex; flex-wrap: wrap; }
+    .number { margin: 4px; display: inline-block; }
+    #counter { margin-top: 10px; font-weight: bold; }
+    #celebration { position: sticky; top: 0; background: yellow; font-size: 32px; color: red; padding: 10px; display: none; z-index: 10; }
   </style>
 </head>
 <body>
   <p>ian</p>
   <h2>每按一次就新增一個 67</h2>
-  <button onclick="addNumber()">新增 67</button>
+  <button id="addBtn">新增 67</button>
   <div id="counter">目前總數：0</div>
   <div id="celebration">🎉 擬真棒！🎉</div>
   <div id="output"></div>
 
   <script>
-  let count = 0;
+    let count = 0;
+    const events = {
+      66: "https://www.youtube.com/watch?v=YDLafQ-Rg-k",
+      67: "https://www.google.com/search?q=67",
+      100: "celebration",
+      150: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      114514: "your-image-url-here" // 你自己的圖片網址
+    };
 
-  // 事件清單：key 是數字，value 是要跳轉的網址
-  const events = {
-    66: "https://www.youtube.com/watch?v=YDLafQ-Rg-k",
-    67: "https://www.google.com/search?q=67",
-    100: "celebration", // 特殊事件：顯示慶祝文字
-    150: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    114514: "https://cdn2.ettoday.net/images/8216/d8216578.jpg"
-  };
+    function addNumber() {
+      count++;
+      const output = document.getElementById("output");
+      const span = document.createElement("span");
+      span.className = "number";
+      span.textContent = "67";
+      output.appendChild(span);
 
-  function addNumber() {
-    count++;
-    const output = document.getElementById("output");
-    const span = document.createElement("span");
-    span.className = "number";
-    span.textContent = "67";
-    output.appendChild(span);
+      document.getElementById("counter").textContent = "目前總數：" + count;
 
-    document.getElementById("counter").textContent = "目前總數：" + count;
-
-    // 檢查事件清單
-    if (events[count]) {
-      if (events[count] === "celebration") {
-        // 顯示慶祝文字
-        document.getElementById("celebration").style.display = "block";
+      if (events[count]) {
+        if (events[count] === "celebration") {
+          document.getElementById("celebration").style.display = "block";
+        } else {
+          window.open(events[count], "_blank");
+        }
       } else {
-        // 開新分頁
-        window.open(events[count], "_blank");
+        document.getElementById("celebration").style.display = "none";
       }
-    } else {
-      // 沒有事件就隱藏慶祝文字
-      document.getElementById("celebration").style.display = "none";
     }
-  }
-</script>
+
+    // 綁定按鈕事件
+    document.getElementById("addBtn").addEventListener("click", addNumber);
+  </script>
 </body>
 </html>
