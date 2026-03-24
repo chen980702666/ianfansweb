@@ -5,7 +5,7 @@
   <title>Google 登入測試</title>
 </head>
 <body>
-  <h2>文字武俠遊戲登入</h2>
+  <h2>Google 登入測試</h2>
   <button id="loginBtn">Google 登入</button>
   <div id="status"></div>
 
@@ -29,6 +29,7 @@
         document.getElementById("status").textContent = "登入成功：" + user.displayName;
       }).catch(err => {
         document.getElementById("status").textContent = "登入失敗：" + err.message;
+        console.error(err);
       });
     };
   </script>
