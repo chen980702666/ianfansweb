@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>踩地雷遊戲</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(10, 30px);
+      grid-template-rows: repeat(10, 30px);
+      gap: 2px;
+      margin: 20px auto;
+      width: max-content;
+    }
+    .cell {
+      width: 30px;
+      height: 30px;
+      background-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+    }
+    .cell.open {
+      background-color: #eee;
+      cursor: default;
+    }
+    .cell.mine {
+      background-color: red;
+    }
+    .cell.flag {
+      background-color: yellow;
+    }
+    #restart {
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>踩地雷遊戲</h1>
+  <button id="restart">重新開始</button>
+  <div id="board"></div>
+  <script>
+    const size = 10;
+    const minesCount = 15;
+    const board = document.getElementById('board');
+    const restartBtn = document.getElementById('restart');
+    let cells = [];
+
+    function init() {
+      cells = [];
+      board.innerHTML = '';
+      for (let i = 0; i < size; i++) {
+        cells[i] = [];
+        for (let j = 0; j < size; j++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.dataset.row = i;
+          cell.dataset.col = j;
+          board.appendChild(cell);
+          cells[i][j] = { element: cell, mine: false, open: false, flag: false, count: 0 };
+          cell.addEventListener('click', () => openCell(i, j));
+          cell.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            toggleFlag(i, j);
+          });
+        }
+      }
+      placeMines();
+      calculateCounts();
+    }
+
+    function placeMines() {
+      let placed = 0;
+      while (placed < minesCount) {
+        const r = Math.floor(Math.random() * size);
+        const c = Math.floor(Math.random() * size);
+        if (!cells[r][c].mine) {
+          cells[r][c].mine = true;
+          placed++;
+        }
+      }
+    }
+
+    function calculateCounts() {
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+          if (cells[i][j].mine) continue;
+          let count = 0;
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              const nr = i + dr, nc = j + dc;
+              if (nr >= 0 && nr < size && nc >= 0 && nc < size && cells[nr][nc].mine) {
+                count++;
+              }
+            }
+          }
+          cells[i][j].count = count;
+        }
+      }
+    }
+
+    function openCell(r, c) {
+      const cell = cells[r][c];
+      if (cell.open || cell.flag) return;
+      cell.open = true;
+      cell.element.classList.add('open');
+      if (cell.mine) {
+        cell.element.classList.add('mine');
+        alert('遊戲結束！踩到地雷了！');
+        revealAll();
+        return;
+      }
+      if (cell.count > 0) {
+        cell.element.textContent = cell.count;
+      } else {
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
+              openCell(nr, nc);
+            }
+          }
+        }
+      }
+    }
+
+    function toggleFlag(r, c) {
+      const cell = cells[r][c];
+      if (cell.open) return;
+      cell.flag = !cell.flag;
+      if (cell.flag) {
+        cell.element.classList.add('flag');
+        cell.element.textContent = '🚩';
+      } else {
+        cell.element.classList.remove('flag');
+        cell.element.textContent = '';
+      }
+    }
+
+    function revealAll() {
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+          const cell = cells[i][j];
+          if (cell.mine) {
+            cell.element.classList.add('mine');
+          } else if (cell.count > 0) {
+            cell.element.textContent = cell.count;
+          }
+        }
+      }
+    }
+
+    restartBtn.addEventListener('click', init);
+
+    init();
+  </script>
+</body>
+</html>
