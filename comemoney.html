@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>紅包雨</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #fff5e6;
+    }
+    .red-packet {
+      position: absolute;
+      width: 50px;
+      height: 70px;
+      background: red;
+      border-radius: 5px;
+      text-align: center;
+      line-height: 70px;
+      color: gold;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    #btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: gold;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <button id="btn">來財紅包雨</button>
+
+  <script>
+    function createRedPacket() {
+      const packet = document.createElement("div");
+      packet.className = "red-packet";
+      packet.innerText = "福";
+      packet.style.left = Math.random() * window.innerWidth + "px";
+      packet.style.top = "-80px";
+      document.body.appendChild(packet);
+
+      let fall = setInterval(() => {
+        let top = parseInt(packet.style.top);
+        if (top < window.innerHeight) {
+          packet.style.top = top + 5 + "px";
+        } else {
+          clearInterval(fall);
+          packet.remove();
+        }
+      }, 30);
+    }
+
+    document.getElementById("btn").addEventListener("click", () => {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(createRedPacket, i * 200);
+      }
+    });
+  </script>
+</body>
+</html>
