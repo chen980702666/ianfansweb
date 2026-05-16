@@ -36,11 +36,10 @@
 </head>
 <body>
   <button id="btn">來財紅包雨</button>
-
-  <script>
-  // 先準備好照片清單
+<script>
+  // 照片清單（抽卡池）
   const images = [
-    ""C:\Users\Brian Chen\Desktop\images\SPOILER_IMG_5103.jpg"",
+    "https://s.yimg.com/ny/api/res/1.2/53MAoJQXUaOCixYl5qFF2g--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04Nzc-/https://s.yimg.com/os/creatr-uploaded-images/2023-03/08740240-ca23-11ed-b8fe-8486d07069f5",
     "images/photo2.jpg",
     "images/photo3.jpg",
     "images/photo4.jpg"
@@ -54,11 +53,42 @@
     packet.style.top = "-80px";
     document.body.appendChild(packet);
 
-    // 點擊事件：警告 + 隨機抽照片
+    // 點擊事件：新分頁抽卡
     packet.addEventListener("click", () => {
-      alert("⚠️ 注意：這是紅包圖片！");
+      // 開新分頁
+      const newWin = window.open("", "_blank");
+      // 警告視窗
+      newWin.alert("⚠️ 注意：這是紅包抽卡！");
+
+      // 抽卡：隨機抽一張照片
       const randomImg = images[Math.floor(Math.random() * images.length)];
-      window.open(randomImg, "_blank");
+
+      // 在新分頁顯示抽到的照片
+      newWin.document.write(`
+        <html>
+          <head>
+            <title>抽卡結果</title>
+            <style>
+              body { 
+                background: #fff5e6; 
+                text-align: center; 
+                font-family: sans-serif;
+              }
+              h1 { color: red; }
+              img { 
+                max-width: 80%; 
+                margin-top: 20px; 
+                border: 5px solid gold; 
+                border-radius: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>🎉 恭喜抽到！</h1>
+            <img src="${randomImg}" alt="抽卡結果">
+          </body>
+        </html>
+      `);
     });
 
     let fall = setInterval(() => {
@@ -78,6 +108,7 @@
     }
   });
 </script>
+
 
 
 </body>
