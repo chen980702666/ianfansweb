@@ -38,30 +38,38 @@
   <button id="btn">來財紅包雨</button>
 
   <script>
-    function createRedPacket() {
-      const packet = document.createElement("div");
-      packet.className = "red-packet";
-      packet.innerText = "福";
-      packet.style.left = Math.random() * window.innerWidth + "px";
-      packet.style.top = "-80px";
-      document.body.appendChild(packet);
+  function createRedPacket() {
+    const packet = document.createElement("div");
+    packet.className = "red-packet";
+    packet.innerText = "福";
+    packet.style.left = Math.random() * window.innerWidth + "px";
+    packet.style.top = "-80px";
+    document.body.appendChild(packet);
 
-      let fall = setInterval(() => {
-        let top = parseInt(packet.style.top);
-        if (top < window.innerHeight) {
-          packet.style.top = top + 5 + "px";
-        } else {
-          clearInterval(fall);
-          packet.remove();
-        }
-      }, 30);
-    }
-
-    document.getElementById("btn").addEventListener("click", () => {
-      for (let i = 0; i < 30; i++) {
-        setTimeout(createRedPacket, i * 200);
-      }
+    // 加入點擊事件：開新分頁 + 警告視窗
+    packet.addEventListener("click", () => {
+      alert("⚠️ 注意：這是紅包圖片！");
+      window.open("images/myphoto.jpg", "_blank"); 
+      // 把 "images/myphoto.jpg" 換成你自己的照片路徑
     });
-  </script>
+
+    let fall = setInterval(() => {
+      let top = parseInt(packet.style.top);
+      if (top < window.innerHeight) {
+        packet.style.top = top + 5 + "px";
+      } else {
+        clearInterval(fall);
+        packet.remove();
+      }
+    }, 30);
+  }
+
+  document.getElementById("btn").addEventListener("click", () => {
+    for (let i = 0; i < 30; i++) {
+      setTimeout(createRedPacket, i * 200);
+    }
+  });
+</script>
+
 </body>
 </html>
