@@ -38,6 +38,14 @@
   <button id="btn">來財紅包雨</button>
 
   <script>
+  // 先準備好照片清單
+  const images = [
+    ""C:\Users\Brian Chen\Desktop\images\SPOILER_IMG_5103.jpg"",
+    "images/photo2.jpg",
+    "images/photo3.jpg",
+    "images/photo4.jpg"
+  ];
+
   function createRedPacket() {
     const packet = document.createElement("div");
     packet.className = "red-packet";
@@ -46,11 +54,11 @@
     packet.style.top = "-80px";
     document.body.appendChild(packet);
 
-    // 加入點擊事件：開新分頁 + 警告視窗
+    // 點擊事件：警告 + 隨機抽照片
     packet.addEventListener("click", () => {
       alert("⚠️ 注意：這是紅包圖片！");
-      window.open("images/myphoto.jpg", "_blank"); 
-      // 把 "images/myphoto.jpg" 換成你自己的照片路徑
+      const randomImg = images[Math.floor(Math.random() * images.length)];
+      window.open(randomImg, "_blank");
     });
 
     let fall = setInterval(() => {
@@ -70,6 +78,7 @@
     }
   });
 </script>
+
 
 </body>
 </html>
