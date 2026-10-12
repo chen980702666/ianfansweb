@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Art Editor</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:#1e1e1e;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+}
+
+h1{
+    margin-bottom:15px;
+}
+
+.toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:15px;
+}
+
+button,input,select{
+    padding:8px 12px;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    cursor:pointer;
+    background:#3498db;
+    color:white;
+}
+
+button:hover{
+    background:#2980b9;
+}
+
+canvas{
+    border:2px solid white;
+    image-rendering: pixelated;
+    background:white;
+}
+
+.active{
+    background:#e74c3c !important;
+}
+
+.info{
+    margin-top:10px;
+    color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎨 Pixel Art Editor</h1>
+
+<div class="toolbar">
+
+<input type="color" id="color" value="#000000">
+
+<button id="brushBtn" class="active">畫筆</button>
+<button id="eraserBtn">橡皮擦</button>
+
+<select id="gridSize">
+<option>16</option>
+<option selected>32</option>
+<option>64</option>
+<option>128</option>
+</select>
+
+<button id="resizeBtn">建立新畫布</button>
+
+<input type="file" id="imageUpload">
+
+<input type="text" id="imageUrl"
+placeholder="輸入圖片網址">
+
+<button id="loadUrl">讀取網址圖片</button>
+
+<button id="clearBtn">清空</button>
+<button id="exportBtn">匯出PNG</button>
+
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div class="info">
+左鍵繪圖 • 可上傳圖片轉像素圖
+</div>
+
+<script>
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+let gridSize=32;
+let pixelSize=20;
+let drawing=false;
+let eraser=false;
+
+function createGrid(size){
+
+gridSize=size;
+
+canvas.width=size*pixelSize;
+canvas.height=size*pixelSize;
+
+ctx.fillStyle="white";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+drawGrid();
+}
+
+function drawGrid(){
+
+ctx.strokeStyle="#ddd";
+
+for(let i=0;i<=gridSize;i++){
+
+ctx.beginPath();
+ctx.moveTo(i*pixelSize,0);
+ctx.lineTo(i*pixelSize,canvas.height);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(0,i*pixelSize);
+ctx.lineTo(canvas.width,i*pixelSize);
+ctx.stroke();
+}
+}
+
+function paint(e){
+
+const rect=canvas.getBoundingClientRect();
+
+const x=Math.floor((e.clientX-rect.left)/pixelSize);
+const y=Math.floor((e.clientY-rect.top)/pixelSize);
+
+ctx.fillStyle=eraser ? "#ffffff"
+                     : document.getElementById("color").value;
+
+ctx.fillRect(
+x*pixelSize,
+y*pixelSize,
+pixelSize,
+pixelSize
+);
+
+ctx.strokeStyle="#ddd";
+ctx.strokeRect(
+x*pixelSize,
+y*pixelSize,
+pixelSize,
+pixelSize
+);
+}
+
+canvas.addEventListener("mousedown",(e)=>{
+drawing=true;
+paint(e);
+});
+
+canvas.addEventListener("mousemove",(e)=>{
+if(drawing) paint(e);
+});
+
+window.addEventListener("mouseup",()=>{
+drawing=false;
+});
+
+document.getElementById("brushBtn")
+.onclick=()=>{
+eraser=false;
+brushBtn.classList.add("active");
+eraserBtn.classList.remove("active");
+};
+
+document.getElementById("eraserBtn")
+.onclick=()=>{
+eraser=true;
+eraserBtn.classList.add("active");
+brushBtn.classList.remove("active");
+};
+
+document.getElementById("resizeBtn")
+.onclick=()=>{
+createGrid(
+parseInt(
+document.getElementById("gridSize").value
+));
+};
+
+document.getElementById("clearBtn")
+.onclick=()=>{
+ctx.fillStyle="white";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+drawGrid();
+};
+
+document.getElementById("exportBtn")
+.onclick=()=>{
+
+const out=document.createElement("canvas");
+const octx=out.getContext("2d");
+
+out.width=gridSize;
+out.height=gridSize;
+
+for(let y=0;y<gridSize;y++){
+for(let x=0;x<gridSize;x++){
+
+let data=ctx.getImageData(
+x*pixelSize+1,
+y*pixelSize+1,
+1,
+1
+).data;
+
+octx.fillStyle=
+`rgb(${data[0]},${data[1]},${data[2]})`;
+
+octx.fillRect(x,y,1,1);
+}
+}
+
+const link=document.createElement("a");
+link.download="pixel-art.png";
+link.href=out.toDataURL();
+link.click();
+};
+
+document.getElementById("imageUpload")
+.addEventListener("change",(e)=>{
+
+const file=e.target.files[0];
+
+if(!file) return;
+
+let img=new Image();
+
+img.onload=()=>pixelize(img);
+
+img.src=URL.createObjectURL(file);
+});
+
+document.getElementById("loadUrl")
+.onclick=()=>{
+
+const url=document.getElementById("imageUrl").value;
+
+if(!url) return;
+
+const img=new Image();
+
+img.crossOrigin="anonymous";
+
+img.onload=()=>pixelize(img);
+
+img.onerror=()=>{
+alert("圖片讀取失敗或CORS限制");
+};
+
+img.src=url;
+};
+
+function pixelize(img){
+
+const temp=document.createElement("canvas");
+const tctx=temp.getContext("2d");
+
+temp.width=gridSize;
+temp.height=gridSize;
+
+tctx.drawImage(img,0,0,gridSize,gridSize);
+
+const data=
+tctx.getImageData(
+0,
+0,
+gridSize,
+gridSize
+).data;
+
+ctx.fillStyle="#fff";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+for(let y=0;y<gridSize;y++){
+for(let x=0;x<gridSize;x++){
+
+const i=(y*gridSize+x)*4;
+
+const r=data[i];
+const g=data[i+1];
+const b=data[i+2];
+
+ctx.fillStyle=`rgb(${r},${g},${b})`;
+
+ctx.fillRect(
+x*pixelSize,
+y*pixelSize,
+pixelSize,
+pixelSize
+);
+}
+}
+
+drawGrid();
+
+alert("轉換完成！");
+}
+
+createGrid(32);
+
+</script>
+
+</body>
+</html>
