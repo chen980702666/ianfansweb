@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+  <head>
+    <title>Chris銘言堂</title>
+    <style>
+.user 
+{
+  text-align: right;
+}
+</style>
+    </head>
+    <h1>Chris銘言堂XChris AI</h1>
+    <script>
+    function typeText(element, text) {
+    let i = 0;
+
+    let timer = setInterval(function() {
+        element.innerHTML += text.charAt(i);
+        i++;
+
+        if (i >= text.length) {
+            clearInterval(timer);
+        }
+    }, 40);
+}
+</script>
+    <script>
+        function ans()
+        {
+       let input = document.getElementById("ask");
+       let ask = input.value;
+        chat=document.getElementById("chat");
+        reply = as(ask);
+        chat.innerHTML += "<div class='user'>你:"+ask+"</div>";
+        let botDiv = document.createElement("div");
+        botDiv.className = "bot";
+        botDiv.innerHTML = "Chris：";
+        chat.appendChild(botDiv);
+        typeText(botDiv,reply);
+        input.value ="";
+        chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+     <script>
+        function as(ask)
+        {
+        if(ask.includes("名言"))
+        {
+           return"Chris銘言堂";
+        }
+        else if(ask.includes("你好"))
+        {
+            return"你好 !傻逼 🖕";
+        }
+        else if(ask.includes("小麵包"))
+        {
+            return"小麵包,是一款由博弈牌皇家禮炮博弈黑絲襪絲絨奶茶荒野亂鬥苟杯上大分之尤諾真好看新泰斯威克數位電子選手荒野亂鬥職業選手隸屬得意的一天頭髮油製油公司所製一款劣質小麵包,因為低廉的價格,身受重氪玩家Chris的喜愛,在1865年台灣傳說對決職業賽中,'劣質小麵包'的公司贊助了Chris所在的戰隊,'黎明企鵝隊'(不懂可以問Chris AI),當戰隊主力Chris吃到了劣質小麵包後,有如Chris附體,直接帶領隊伍贏的勝利 👉👌 ";
+        }
+        else if(ask.includes("你是甚麼")||ask.includes("你是什麼")||ask.includes("什麼是Chris ai")||ask.includes("你是誰"))
+        {
+            return"Chris AI,是一款由博弈牌皇家禮炮博弈黑絲襪絲絨奶茶荒野亂鬥苟杯上大分之尤諾真好看新泰斯威克數位電子選手荒野亂鬥職業選手隸屬得意的一天頭髮油製油公司所製作的Chris小數據演算模型,常用於原神開荒教學,還有Chris手把手帶你傳說對決你打上職業賽等.......";
+        }
+        else if(ask.includes("chris")||ask.includes("Chris")||ask.includes("中品成")||ask.includes("鐘品程")||ask.includes("鐘品皇"))
+        {
+            return"Chris,本名不詳,資料不詳,但根據訪間紀錄可以得知Chris經是一個8+9,現已轉正,目前在黎明企鵝隊擔任金牌打手,曾帶領隊伍多次奪冠,Chris還是一個資深原神玩家同時也擔任知名組織'原神國家隊'隊長(俗稱鐘隊長),另外還擔任'台灣小麵包協會 五股分會'會長,並長期代言小麵包相關產業";
+        }
+        else if(ask.includes("原神國家隊"))
+        {
+            return"Chris,是一名原神職業選手,他每個月都會課大月卡&小月卡,他還會尾隨同學瘋狂分享原神抽卡紀錄,根據Chris的說法,他有三命雷電將軍一個普功高達十萬";
+        }
+        else if(ask.includes("鐘隊長"))
+        {
+            return"原神國家隊,鐘品程隊長(以下簡稱鐘隊長),曾經在五股國中服役,根據中隊長的回憶錄可以得知,鐘隊長以前應該是個8+9(簡稱8+7),專門做一些維護校園的活動(比如:拿滅火器給班導過生日,跟江湖兄弟在廁所打槍,攜帶瓦斯槍給班導慶祝生日,跟江湖兄弟一起在校長室放鞭炮)";
+        }
+        else if(ask.includes("職業選手")||ask.includes("選手"))
+        {
+            return"Chris是黎明技術學院的電競校隊「黎明企鵝（LIT）」的一員,在《傳說對決》ACS校園聯賽中表現優異。根據2025年最新資訊，隊伍迎來全新陣容，包括Chris等選手。該隊曾在ACS S11及LSC聯賽中奪冠。"
+        }
+        else if(ask.includes("傳說")||ask.includes("黎明企鵝")||ask.includes("黎明企鵝選手")||ask.includes("黎明技術學院電競")||ask.includes("傳說選手")||ask.includes("黎明企鵝鐘品程"))
+        {
+            return"黎明企鵝（LIT, lite_sports_center）是黎明技術學院的官方電競戰隊，為《傳說對決》ACS校園聯賽的頂尖強隊。該隊伍由汪嘉教練帶領，曾多次獲得ACS冠軍，並在2025年冬季賽再次奪冠，獲得GCS 2026春季職業聯賽臨時席位，擅長以高度合作與戰術優勢應對強敵。"+
+
+           "核心亮點與資訊："+
+           "校園王者： 黎明技術學院電競中心（黎明電競中心）之校隊，以穩定與突破極限的團結精神著稱。"+
+           "ACS 輝煌戰績： 曾達成二連霸，並在 2025 年冬季賽總決賽中以 4:1 擊敗莊敬猛虎，奪下隊史重要冠軍。"+
+           "挑戰職業舞台： 因贏得 2025 年冬季賽總冠軍，獲得 GCS 2026 春季職業聯賽的臨時席位，獲得與職業高手對戰的機會。"+
+           "關鍵選手與教練： 包含 FMVP 選手 noname（關鍵開戰能力強）以及教練汪嘉。"+
+           "活躍賽事： 於 2026 年初舉辦並參與「2026黎明盃電競校園爭霸賽」。"
+
+        }
+        else
+        {
+            return"傻逼 🖕";
+        }
+        }
+    </script>
+    <body>
+        <div id="chat"></div>
+        <style>
+#chat
+{
+    width:1000px;
+    height:600px;
+    border:1px solid black;
+    overflow-y: auto;
+    padding:10px;
+}
+</style>
+        <input type="text" id="ask" placeholder="想問就問">
+        <input type="button" value="送出" onclick="ans()">
+    </body>
